@@ -8,10 +8,10 @@ const auth = require("./middleware");
 router.post("/login", (req, res, next) => {
   if (req.body) {
     if (req.body.email && req.body.password) {
-      const user = {
-        email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 10)
-      };
+      // const user = {
+      //   email: req.body.email,
+      //   password: bcrypt.hashSync(req.body.password, 10)
+      // };
       // find user by email
       User.findOne({
         where: {
