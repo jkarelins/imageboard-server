@@ -2,8 +2,12 @@ const { Router } = require("express");
 const { toJWT, toData } = require("./jwt");
 const router = new Router();
 const User = require("../models/user/model");
+const Image = require("../models/model");
 const bcrypt = require("bcrypt");
 const auth = require("./middleware");
+
+Image.belongsTo(User);
+User.hasMany(Image);
 
 router.post("/login", (req, res, next) => {
   if (req.body) {
@@ -86,6 +90,21 @@ router.post("/user", (req, res, next) => {
       message: "Please supply a valid email and password"
     });
   }
+});
+
+router.get("/user", (req, res, next) => {
+  User.findAll({ include: [Image] })
+    .then(users => {
+      if (users) {
+        users.map(user => (user.password = ""));
+        res.json(users);
+      } else {
+        res.status(404).send({
+          message: "Sorry no Users found"
+        });
+      }
+    })
+    .catch(next);
 });
 
 router.get("/secret-endpoint", auth, (req, res) => {

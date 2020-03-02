@@ -6,7 +6,6 @@ const port = process.env.PORT || 4000;
 
 const corsMiddleware = cors();
 const parserMiddleware = bodyParser.json();
-const Image = require("./models/model");
 const imageRoute = require("./models/router");
 const loginRoute = require("./auth/router");
 

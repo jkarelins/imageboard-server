@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const router = new Router();
 const Image = require("./model");
+const User = require("./user/model");
 const auth = require("../auth/middleware");
 
 router.get("/", (req, res, next) => {
@@ -14,9 +15,12 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/", auth, (req, res, next) => {
+  console.log(req.body);
   if (req.body) {
     if (req.body.url && req.body.title) {
-      Image.create(req.body)
+      // console.log(req.user);
+      const userId = req.user.id;
+      Image.create({ ...req.body, userId })
         .then(newImage => res.send(newImage))
         .catch(next);
     } else {
