@@ -12,4 +12,18 @@ router.get("/", (req, res, next) => {
   });
 });
 
+router.post("/", (req, res, next) => {
+  if (req.body) {
+    if (req.body.url && req.body.title) {
+      Image.create(req.body)
+        .then(newImage => res.send(newImage))
+        .catch(next);
+    } else {
+      return res.status(400).end();
+    }
+  } else {
+    return res.status(400).end();
+  }
+});
+
 module.exports = router;
