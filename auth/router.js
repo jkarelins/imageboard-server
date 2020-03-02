@@ -61,9 +61,21 @@ router.post("/user", (req, res, next) => {
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 10)
       };
-      User.create(user)
-        .then(newUser => res.json(newUser))
-        .catch(next);
+      User.findOne({
+        where: {
+          email: req.body.email
+        }
+      }).then(foundUser => {
+        if (!foundUser) {
+          User.create(user)
+            .then(newUser => res.json(newUser))
+            .catch(next);
+        } else {
+          res.status(400).send({
+            message: "User already exists"
+          });
+        }
+      });
     } else {
       res.status(400).send({
         message: "Please supply a valid email and password"
